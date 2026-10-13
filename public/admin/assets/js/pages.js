@@ -989,10 +989,17 @@ const Pages = {
 
   _kv(label, value) {
     const display = value == null || value === '' ? '—' : String(value);
+    const escaped = display.replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    }[char]));
     return `
       <div class="profile-kv">
         <div class="profile-kv-label">${label}</div>
-        <div class="profile-kv-value">${display}</div>
+        <div class="profile-kv-value" style="white-space: pre-wrap">${escaped}</div>
       </div>`;
   },
 
@@ -1026,13 +1033,15 @@ const Pages = {
 
       const appsHtml = apps.length
         ? `<div class="table-responsive"><table class="table table-sm table-hover mb-0">
-            <thead><tr><th>Year</th><th>Zone</th><th>Status</th><th>Applied</th><th>Reviewed</th></tr></thead>
+            <thead><tr><th>Year</th><th>Zone</th><th>Status</th><th>Applied</th><th>Submitted</th><th>Referee</th><th>Reviewed</th></tr></thead>
             <tbody>${apps.map(a => `
               <tr>
                 <td>${a.application_year || '—'}</td>
                 <td>${a.zone_name || '—'}</td>
                 <td><span class="badge bg-secondary">${a.application_status}</span></td>
                 <td>${Admin.formatDate(a.applied_at)}</td>
+                <td>${Admin.formatDate(a.submitted_at)}</td>
+                <td>${Admin.formatDate(a.referee_completed_at)}</td>
                 <td>${Admin.formatDate(a.reviewed_at)}</td>
               </tr>`).join('')}
             </tbody></table></div>`
@@ -1090,7 +1099,69 @@ const Pages = {
               <div class="card-header fw-semibold"><i class="bi bi-telephone me-2"></i>Contact</div>
               <div class="card-body profile-kv-grid">
                 ${this._kv('Phone', s.phone)}
+                ${this._kv('Alternative phone', s.alt_phone)}
                 ${this._kv('Email', s.email)}
+                ${this._kv('Age', s.age)}
+                ${this._kv('Marital status', s.marital_status)}
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card table-card h-100">
+              <div class="card-header fw-semibold"><i class="bi bi-building me-2"></i>Church and Calling</div>
+              <div class="card-body profile-kv-grid">
+                ${this._kv('Church / assembly', s.church)}
+                ${this._kv('Function or post', s.church_post)}
+                ${this._kv('Born again', s.born_again)}
+                ${this._kv('Baptised into the Holy Ghost', s.baptism)}
+                ${this._kv('Calling', s.calling)}
+                ${this._kv('Currently in calling', s.in_calling)}
+                ${this._kv('Entered calling', s.entered_calling)}
+                ${this._kv('Attended MITRE before', s.attended_mitre)}
+                ${this._kv('Why MITRE', s.why_mitre)}
+                ${this._kv('Spiritual oversight', s.oversight)}
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card table-card h-100">
+              <div class="card-header fw-semibold"><i class="bi bi-mortarboard me-2"></i>Education and Work</div>
+              <div class="card-body profile-kv-grid">
+                ${this._kv('Occupation', s.occupation)}
+                ${this._kv('Languages spoken', s.lang_speak)}
+                ${this._kv('Languages written', s.lang_write)}
+                ${this._kv('Reads and writes English effectively', s.literacy)}
+                ${this._kv('Highest certificate', s.certificate)}
+                ${this._kv('Certificate year', s.cert_year)}
+                ${this._kv('Institution', s.institution)}
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card table-card h-100">
+              <div class="card-header fw-semibold"><i class="bi bi-person-lines-fill me-2"></i>Referee Details</div>
+              <div class="card-body profile-kv-grid">
+                ${this._kv('Applicant-provided referee name', s.applicant_ref_name)}
+                ${this._kv('Applicant-provided referee phone', s.applicant_ref_phone)}
+                ${this._kv('Applicant-provided referee email', s.applicant_ref_email)}
+                ${this._kv('Referee name', s.ref_name)}
+                ${this._kv('Referee phone', s.ref_phone)}
+                ${this._kv('Referee email', s.ref_email)}
+                ${this._kv('Referee address', s.ref_address)}
+                ${this._kv('Relationship / duration', s.ref_duration)}
+                ${this._kv('Referee information', s.ref_info)}
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card table-card h-100">
+              <div class="card-header fw-semibold"><i class="bi bi-file-earmark-image me-2"></i>Application Record</div>
+              <div class="card-body profile-kv-grid">
+                ${this._kv('Application step', s.application_step)}
+                ${this._kv('Application date', Admin.formatDate(s.application_date))}
+                ${this._kv('Passport photo', s.passport_photo ? 'Uploaded' : 'Not uploaded')}
+                ${this._kv('Created', Admin.formatDate(s.created_at))}
+                ${this._kv('Last updated', Admin.formatDate(s.updated_at))}
               </div>
             </div>
           </div>
