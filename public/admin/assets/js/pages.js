@@ -1024,7 +1024,6 @@ const Pages = {
       const fullName = [s.first_name, s.other_names, s.last_name].filter(Boolean).join(' ');
       const photo = this._photoUrl(s.passport_photo);
       const genderLabel = s.gender ? s.gender.charAt(0).toUpperCase() + s.gender.slice(1) : '—';
-      const dob = s.date_of_birth ? Admin.formatDate(s.date_of_birth) : '—';
 
       const avatarHtml = photo
         ? `<img src="${photo}" alt="Passport" class="profile-passport" onerror="this.classList.add('d-none'); this.nextElementSibling.classList.remove('d-none');">
@@ -1087,7 +1086,6 @@ const Pages = {
               <div class="card-body profile-kv-grid">
                 ${this._kv('Full name', fullName)}
                 ${this._kv('Gender', genderLabel)}
-                ${this._kv('Date of birth', dob)}
                 ${this._kv('State of origin', s.state_of_origin)}
                 ${this._kv('LGA', s.lga)}
                 ${this._kv('Address', s.address)}
